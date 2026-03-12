@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINDASTAY.AI - Direct Booking Revolution</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cream: #faf8f5;
+            --forest: #2d5016;
+            --warm-brown: #8b4513;
+            --terracotta: #c65d07;
+            --sage: #9caf88;
+            --soft-white: #ffffff;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cream);
+            color: var(--forest);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+            background: rgba(250, 248, 245, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav.scrolled {
+            background: rgba(250, 248, 245, 0.95);
+            box-shadow: 0 4px 20px rgba(45, 80, 22, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--forest);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--forest);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .nav-links a:hover {
+            background: var(--sage);
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, var(--cream) 0%, #e8f5e8 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 60%;
+            height: 120%;
+            background: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800') center/cover;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            background: var(--sage);
+            top: 20%;
+            left: 10%;
+            animation-delay: -2s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            background: var(--terracotta);
+            top: 60%;
+            left: 80%;
+            animation-delay: -4s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            background: var(--warm-brown);
+            top: 80%;
+            left: 20%;
+            animation-delay: -6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-text h1 {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            color: var(--forest);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: slideUp 1s ease-out 0.5s forwards;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: var(--warm-brown);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideUp 1s ease-out 0.7s forwards;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2.5rem;
+            background: var(--forest);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(45, 80, 22, 0.3);
+            opacity: 0;
+            animation: slideUp 1s ease-out 0.9s forwards;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(45, 80, 22, 0.4);
+        }
+
+        .hero-image {
+            position: relative;
+            opacity: 0;
+            animation: slideLeft 1s ease-out 1.1s forwards;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(45, 80, 22, 0.2);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideLeft {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .stats {
+            background: var(--soft-white);
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--sage), transparent);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .stat.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-number {
+            font-family: 'Caveat', cursive;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--terracotta);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-weight: 600;
+            color: var(--forest);
+        }
+
+        .features {
+            padding: 6rem 2rem;
+            background: linear-gradient(45deg, var(--cream) 0%, #f0f8f0 100%);
+            position: relative;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Caveat', cursive;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            color: var(--forest);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .feature-nav {
+            position: sticky;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .feature-item {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .feature-item:hover {
+            background: var(--soft-white);
+            border-left-color: var(--sage);
+            transform: translateX(10px);
+        }
+
+        .feature-item.active {
+            background: var(--soft-white);
+            border-left-color: var(--terracotta);
+            transform: translateX(10px);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--sage);
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        .feature-content {
+            position: relative;
+        }
+
+        .feature-panel {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            transition: all 0.5s ease;
+        }
+
+        .feature-panel.active {
+            opacity: 1;
+            position: relative;
+        }
+
+        .feature-image {
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 60px rgba(45, 80, 22, 0.1);
+        }
+
+        .how-it-works {
+            padding: 6rem 2rem;
+            background: var(--soft-white);
+            position: relative;
+        }
+
+        .steps-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            position: relative;
+        }
+
+        .step {
+            position: relative;
+            padding: 2rem;
+            background: var(--cream);
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .step.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .step:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(45, 80, 22, 0.1);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: var(--terracotta);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .pricing {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--forest) 0%, var(--warm-brown) 100%);
+            color: white;
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .pricing-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .pricing-card.featured {
+            transform: scale(1.05);
+            border-color: var(--sage);
+        }
+
+        .testimonials {
+            padding: 6rem 2rem;
+            background: var(--cream);
+            overflow: hidden;
+        }
+
+        .testimonials-marquee {
+            display: flex;
+            animation: scroll 30s linear infinite;
+            gap: 2rem;
+        }
+
+        .testimonial {
+            min-width: 350px;
+            background: var(--soft-white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(45, 80, 22, 0.1);
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .faq {
+            padding: 6rem 2rem;
+            background: var(--soft-white);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 1rem;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(45, 80, 22, 0.1);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            background: var(--cream);
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--sage);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            background: var(--soft-white);
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 1.5rem;
+            max-height: 200px;
+        }
+
+        .final-cta {
+            padding: 6rem 2rem;
+            background: linear-gradient(45deg, var(--sage) 0%, var(--terracotta) 100%);
+            text-align: center;
+            color: white;
+        }
+
+        .final-cta h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer {
+            background: var(--forest);
+            color: white;
+            padding: 3rem 2rem 1rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-nav {
+                position: static;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="logo">FINDASTAY.AI</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Skip the 15% Commission. Book Direct.</h1>
+                <p>AI-powered accommodation discovery that connects travelers directly with properties. Save money, negotiate rates, and support local businesses.</p>
+                <a href="#" class="cta-button">
+                    Start Exploring
+                    <span>→</span>
+                </a>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800" alt="Beautiful boutique hotel">
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat">
+                <span class="stat-number" data-target="2.5">0</span>
+                <div class="stat-label">Average Admin Fee</div>
+            </div>
+            <div class="stat">
+                <span class="stat-number" data-target="87">0</span>
+                <div class="stat-label">% Cost Savings</div>
+            </div>
+            <div class="stat">
+                <span class="stat-number" data-target="15000">0</span>
+                <div class="stat-label">Properties Connected</div>
+            </div>
+            <div class="stat">
+                <span class="stat-number" data-target="24">0</span>
+                <div class="stat-label">Countries Covered</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="features-container">
+            <h2 class="section-title">Revolutionary Booking Experience</h2>
+            <div class="features-grid">
+                <div class="feature-nav">
+                    <div class="feature-item active" data-feature="ai">
+                        <div class="feature-icon"></div>
+                        <h3>AI-Powered Search</h3>
+                        <p>Conversational discovery that understands your needs</p>
+                    </div>
+                    <div class="feature-item" data-feature="map">
+                        <div class="feature-icon"></div>
+                        <h3>Map-Based Discovery</h3>
+                        <p>Visual exploration with real-time pricing</p>
+                    </div>
+                    <div class="feature-item" data-feature="direct">
+                        <div class="feature-icon"></div>
+                        <h3>Direct Negotiation</h3>
+                        <p>Chat directly with property owners</p>
+                    </div>
+                    <div class="feature-item" data-feature="savings">
+                        <div class="feature-icon"></div>
+                        <h3>Massive Savings</h3>
+                        <p>No commission markups passed to you</p>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <div class="feature-panel active" id="ai">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800" alt="AI Technology" class="feature-image">
+                        <h3>Smart Accommodation Discovery</h3>
+                        <p>Our AI understands natural language and context, helping you find the perfect stay based on your preferences, budget, and travel style. No more endless scrolling through irrelevant options.</p>
+                    </div>
+                    <div class="feature-panel" id="map">
+                        <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800" alt="Map Interface" class="feature-image">
+                        <h3>Visual Price Discovery</h3>
+                        <p>See real-time pricing on an interactive map. Compare locations, view nearby amenities, and discover hidden gems in your desired area with transparent, commission-free rates.</p>
+                    </div>
+                    <div class="feature-panel" id="direct">
+                        <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800" alt="Direct Communication" class="feature-image">
+                        <h3>Person-to-Person Connection</h3>
+                        <p>Skip the middleman and connect directly with property owners. Negotiate rates, ask questions, and build relationships that enhance your travel experience.</p>
+                    </div>
+                    <div class="feature-panel" id="savings">
+                        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800" alt="Savings Calculator" class="feature-image">
+                        <h3>True Cost Transparency</h3>
+                        <p>With traditional platforms charging 15-25% commission (often hidden in inflated rates), our low admin fees mean real savings for both travelers and properties.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="how-it-works-container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Tell Our AI What You Want</h3>
+                    <p>Describe your ideal stay in natural language. "Cozy B&B near the beach for a romantic weekend" or "Family-friendly hotel with pool in downtown."</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Explore on the Map</h3>
+                    <p>View personalized recommendations on our interactive map. See real prices, read authentic reviews, and compare options visually.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Connect & Negotiate</h3>
+                    <p>Chat directly with property owners. Ask questions, request special rates, or customize your stay. Build real connections.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Book Direct & Save</h3>
+                    <p>Complete your booking with just a small admin fee. Enjoy lower rates and maintain your relationship with the property for future stays.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="pricing-container">
+            <h2 class="section-title">Fair Pricing for Everyone</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Basic</h3>
+                    <div class="price">$2.50</div>
+                    <div class="price-desc">admin fee per booking</div>
+                    <ul>
+                        <li>Small properties (<10 rooms)</li>
+                        <li>Standard listing priority</li>
+                        <li>Basic analytics</li>
+                        <li>Email support</li>
+                    </ul>
+                </div>
+                <div class="pricing-card featured">
+                    <h3>Professional</h3>
+                    <div class="price">$1.50</div>
+                    <div class="price-desc">admin fee per booking</div>
+                    <ul>
+                        <li>Mid-size properties (10-50 rooms)</li>
+                        <li>Priority listing placement</li>
+                        <li>Advanced analytics</li>
+                        <li>Priority support</li>
+                        <li>Custom branding</li>
+                    </ul>
+                </div>
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">$0.99</div>
+                    <div class="price-desc">admin fee per booking</div>
+                    <ul>
+                        <li>Large properties (50+ rooms)</li>
+                        <li>API integration</li>
+                        <li>Dedicated account manager</li>
+                        <li>Custom reporting</li>
+                        <li>White-label options</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="section-title">What Our Partners Say</div>
+        <div class="testimonials-marquee">
+            <div class="testimonial">
+                <p>"We've saved thousands in commission fees while maintaining direct relationships with our guests. Game-changer!"</p>
+                <strong>— Sarah Chen, Oceanview B&B</strong>
+            </div>
+            <div class="testimonial">
+                <p>"The AI search actually understands what I'm looking for. Found perfect accommodations I never would have discovered otherwise."</p>
+                <strong>— Marcus Rodriguez, Frequent Traveler</strong>
+            </div>
+            <div class="testimonial">
+                <p>"Direct negotiation feature helped us secure group rates for our corporate retreats. Excellent platform."</p>
+                <strong>— Jennifer Walsh, TechStart Inc</strong>
+            </div>
+            <div class="testimonial">
+                <p>"Finally, a platform that puts properties first. Our booking costs dropped by 90% overnight."</p>
+                <strong>— David Kim, Mountain Lodge</strong>
+            </div>
+            <div class="testimonial">
+                <p>"The map-based discovery is brilliant. Much easier to find stays in the exact location we wanted."</p>
+                <strong>— Emma Thompson, Family Traveler</strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq">
+        <div class="faq-container">
+            <h2 class="section-title">Common Questions</h2>
+            <div class="faq-item">
+                <div class="faq-question">
+                    How much can I really save compared to traditional booking sites?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Properties typically save 85-90% on booking fees (from 15-25% commission to our $0.99-$2.50 admin fee). Many properties pass these savings to travelers through lower rates, while others use it to improve their facilities and services.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Is it safe to book directly through your platform?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes! We use enterprise-grade security and partner with established payment processors. All properties are verified, and we provide booking protection similar to major travel sites, but with the transparency and savings of direct booking.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    How does the AI search actually work?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Our AI processes natural language queries and matches them with property features, location data, and guest preferences. It learns from successful bookings to provide increasingly personalized recommendations while considering your budget and travel style.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    What if a property doesn't respond to my negotiation request?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Most properties respond within 24 hours. If there's no response, you can book at the listed rate or explore our AI-suggested alternatives. We're constantly working with properties to improve response times and availability.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta">
+        <h2>Ready to Revolutionize Your Booking Experience?</h2>
+        <p>Join thousands of travelers and properties who've discovered the power of direct booking.</p>
+        <a href="#" class="cta-button">Get Started Free</a>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <h3>FINDASTAY.AI</h3>
+                <p>Connecting travelers directly with extraordinary accommodations.</p>
+            </div>
+            <div>
+                <h4>Product</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li><a href="#" style="color: #9caf88;">Features</a></li>
+                    <li><a href="#" style="color: #9caf88;">Pricing</a></li>
+                    <li><a href="#" style="color: #9caf88;">API</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Company</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li><a href="#" style="color: #9caf88;">About</a></li>
+                    <li><a href="#" style="color: #9caf88;">Careers</a></li>
+                    <li><a href="#" style="color: #9caf88;">Press</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Support</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li><a href="#" style="color: #9caf88;">Help Center</a></li>
+                    <li><a href="#" style="color: #9caf88;">Contact Us</a></li>
+                    <li><a href="#" style="color: #9caf88;">Privacy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <p>&copy; 2024 FINDASTAY.AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Animated counters
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.ceil(current);
+            }, 20);
+        }
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animate counters when stats section comes into view
+                    if (entry.target.classList.contains('stat')) {
+                        const number = entry.target.querySelector('.stat-number');
+                        const target = parseInt(number.dataset.target);
+                        animateCounter(number, target);
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Observe elements for animation
+        document.querySelectorAll('.stat, .step, .pricing-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Feature tabs functionality
+        document.querySelectorAll('.feature-item').forEach(item => {
+            item.addEventListener('click', () => {
+                // Remove active class from all items and panels
+                document.querySelectorAll('.feature-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.feature-panel').forEach(p => p.classList.remove('active'));
+                
+                // Add active class to clicked item and corresponding panel
+                item.classList.add('active');
+                const feature = item.dataset.feature;
+                document.getElementById(feature).classList.add('active');
+            });
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                // Close all FAQ items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                    item.querySelector('.faq-question span').textContent = '+';
+                });
+                
+                // Toggle current item
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                    question.querySelector('span').textContent = '−';
+                }
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Duplicate testimonials for seamless loop
+        const marquee = document.querySelector('.testimonials-marquee');
+        const testimonials = marquee.innerHTML;
+        marquee.innerHTML = testimonials + testimonials;
+    </script>
+</body>
+</html>
